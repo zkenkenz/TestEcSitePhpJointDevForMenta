@@ -24,13 +24,6 @@ Route::get('item', 'App\Http\Controllers\ItemController@itemsList')->name('items
 Route::post('item', 'App\Http\Controllers\ItemController@postItemsList');
 Route::post('itemDetail','App\Http\Controllers\ItemController@detail');
 
-//mycart画面
-Route::get('mycart', function () {
-    return redirect('item');
-});
-//カートに入れるでpostで送られた際のルート
-Route::post('mycart', 'App\Http\Controllers\ItemController@postmycart');
-
 
 
 
