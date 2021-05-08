@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\Cart;
 
 
 
@@ -25,6 +25,7 @@ class ItemController extends Controller
         //6商品ごとにページネーション
         //$items = Item::Paginate(6);
         $items = DB::table('items')->paginate(6);
+
 
         return view('items.index', compact('items'));
     }
@@ -63,7 +64,6 @@ class ItemController extends Controller
     }
 
 
-    
 
 
     public function result(Request $request)
