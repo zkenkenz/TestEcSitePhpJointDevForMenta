@@ -5,7 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Cart;
+
+use App\Models\Item;
+use App\Models\Nice;
+use App\Models\Information;
+
+
 
 
 
@@ -25,9 +30,6 @@ class ItemController extends Controller
         //6商品ごとにページネーション
         //$items = Item::Paginate(6);
         $items = DB::table('items')->paginate(6);
-
-        DB::table('carts')
-            ->truncate();
 
         return view('items.index', compact('items'));
     }
@@ -50,7 +52,7 @@ class ItemController extends Controller
         return view('items.index', compact('items'));
     }
 
-    public function detail(Request $request)
+    public function detail(Item $item, Request $request)
     {
         /**
          * 
@@ -62,54 +64,21 @@ class ItemController extends Controller
             ->where('id', $itemId)
             ->first();
 
-        return view('items.itemDetail', compact('itemDetails'));
-    }
-
-
-    public function postmycart(Request $request)
-    {
-        /**
+         /**
          * 
-         * 購入ボタンを押された時の処理
-         */
+         * いいね機能
+         */           
+        $item = Item::all()->where('id', $itemId)->first();
+        $nice=Nice::all();
+        $request=request();
+        $ip = $request->ip();
+        $nice=Nice::where('item_id', $item->id)->where('ip', $ip)->first();
 
-        //カートボタンのpostの値をdbに保存、削除ボタンとの条件分け
-
-        if (isset($request->addCart)) {
-            $cart = new Cart;
-
-            $cart->item_id = $request->itemId;
-            $cart->name = $request->itemName;
-            if (isset($request->itemImg)) {
-                $cart->imgpash = $request->itemImg;
-            } else {
-                $cart->imgpash = "NULL.jpg";
-            }
-            $cart->detail = $request->itemDetail;
-            $cart->price = $request->itemPrice;
-            $cart->stock = $request->itemStock;
-            $cart->save();
-
-            //二重送信防止トークン
-            $request->session()->regenerateToken();
-            
-            $message = "商品を追加しました";
-        } elseif (isset($request->deleteCartItem)) {
-            $created_at = $request->created_at;
-            DB::table('carts')
-                ->where('created_at', $created_at)
-                ->delete();
-            $message = "商品を削除しました";
-        } elseif (isset($request->myCart)) {
-        }
-
-        if (!isset($message)) {
-            $message = "カートの中身";
-        }
-        $carts = DB::table('carts')->get();
-
-        return view('mycarts.index', compact('carts', 'message'));
+        return view('items.itemDetail', compact('itemDetails','item', 'nice'));
     }
+
+
+    
 
 
     public function result(Request $request)

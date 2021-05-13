@@ -50,7 +50,32 @@
         </form>
     @else
         <p>在庫がありません</p>
-    @endif       
+    @endif      
+
+    <div class="nice mt-3">
+        <!-- もし$niceがあれば＝ユーザーが「いいね」をしていたら -->
+        @if($nice)
+        <!-- 「いいね」取消用ボタンを表示 -->
+            <a href="{{ route('unnice', $itemDetails->id) }}" class="btn btn-success btn-sm">
+                いいね
+                <!-- 「いいね」の数を表示 -->
+                <span class="badge">
+                    {{ $item->likes->count() }}
+                </span>
+            </a>
+        @else
+        <!-- まだユーザーが「いいね」をしていなければ、「いいね」ボタンを表示 -->
+            <a href="{{ route('nice', $itemDetails->id) }}" class="btn btn-secondary btn-sm">
+                いいね
+                <!-- 「いいね」の数を表示 -->
+                <span class="badge">
+                    {{ $item->likes->count() }}
+                </span>
+            </a>
+        @endif
+    </div>
+
+
     </div>
 </div>
 @endsection
