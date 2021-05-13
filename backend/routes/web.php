@@ -22,7 +22,8 @@ Route::get('/', function () {
 //商品一覧画面
 Route::get('item', 'App\Http\Controllers\ItemController@itemsList')->name('items.index');
 Route::post('item', 'App\Http\Controllers\ItemController@postItemsList');
-Route::post('itemDetail','App\Http\Controllers\ItemController@detail');
+Route::get('itemDetail','App\Http\Controllers\ItemController@detail');
+
 
 
 
@@ -97,3 +98,9 @@ Route::post('detail', 'App\Http\Controllers\AdminController@details');
 Route::get('detail', function () {
     return redirect('admin');
 });
+
+//いいね機能
+
+Route::get('nice/{post}', 'App\Http\Controllers\NiceController@nice')->name('nice');
+Route::get('unnice/{post}', 'App\Http\Controllers\NiceController@unnice')->name('unnice');
+

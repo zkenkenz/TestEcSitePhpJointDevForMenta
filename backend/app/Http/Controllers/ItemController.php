@@ -5,7 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Cart;
+
+use App\Models\Item;
+use App\Models\Nice;
+use App\Models\Information;
+
+
 
 
 
@@ -47,7 +52,7 @@ class ItemController extends Controller
         return view('items.index', compact('items'));
     }
 
-    public function detail(Request $request)
+    public function detail(Item $item, Request $request)
     {
         /**
          * 
@@ -59,10 +64,21 @@ class ItemController extends Controller
             ->where('id', $itemId)
             ->first();
 
-        return view('items.itemDetail', compact('itemDetails'));
+         /**
+         * 
+         * いいね機能
+         */           
+        $item = Item::all()->where('id', $itemId)->first();
+        $nice=Nice::all();
+        $request=request();
+        $ip = $request->ip();
+        $nice=Nice::where('item_id', $item->id)->where('ip', $ip)->first();
+
+        return view('items.itemDetail', compact('itemDetails','item', 'nice'));
     }
 
 
+    
 
 
     public function result(Request $request)

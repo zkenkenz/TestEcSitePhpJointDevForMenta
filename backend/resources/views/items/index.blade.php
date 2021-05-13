@@ -34,7 +34,7 @@
         @foreach ($items as $item )
         <div class="product">
             <img src="{{asset('storage/image/'.$item->imgpash )}}" class="image_size" style="border:solid 1px rgb(0,0,0)">
-            <form action="itemDetail" method="post">
+            <form action="itemDetail" method="get">
                 @csrf
                 <input type="hidden" name="itemId" value=" {{ $item->id }}">
                 <h2 class="item_name" style="font-size:20px;"><input type="submit" value="{{ $item->name }}"></h2>
